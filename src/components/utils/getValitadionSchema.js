@@ -8,11 +8,11 @@ export function getValidationSchema() {
 
   const nameValidationText =
     "Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan";
-  const numberValidationText =
+  const phoneValidationText =
     'Phone number must be digits and can contain spaces, dashes, parentheses and can start with +';
 
   return yup.object().shape({
     name: yup.string().required().matches(nameRegExp, nameValidationText),
-    number: yup.string().required().matches(phoneRegExp, numberValidationText),
+    phone: yup.string().required().matches(phoneRegExp, phoneValidationText),
   });
 }

@@ -1,5 +1,4 @@
 import { Formik } from 'formik';
-import { addContact } from '../../redux/contactsSlice';
 import {
   FormPhonebook,
   Input,
@@ -11,39 +10,38 @@ import {
 import { FormError } from './FormError/FormError';
 import { getValidationSchema } from '../utils/getValitadionSchema';
 import { useDispatch, useSelector } from 'react-redux';
-import { getContacts } from 'redux/selectors';
+import { selectVisibleContacts } from 'redux/selectors';
+import { addContact } from 'redux/operations';
 
 const initialValues = {
   name: '',
-  number: '',
+  phone: '',
 };
 
 export const FormContacts = () => {
-  const contacts = useSelector(getContacts);
+  const contacts = useSelector(selectVisibleContacts);
   const dispatch = useDispatch();
 
   const handleSubmit = (value, actions) => {
     const name = value.name;
-    const number = value.number;
+    const phone = value.phone;
 
     const checkName = contacts.some(
       item => item.name.toLowerCase() === name.toLowerCase()
     );
-    const checkNumber = contacts.some(item => {
-      const stateNumber = parseInt(number.replace(/[^\d]/g, ''));
-      const newNumber = parseInt(item.number.replace(/[^\d]/g, ''));
-      return stateNumber === newNumber;
+    const checkPhone = contacts.some(item => {
+      const statePhone = parseInt(phone.replace(/[^\d]/g, ''));
+      const newPhone = parseInt(item.phone.replace(/[^\d]/g, ''));
+      return statePhone === newPhone;
     });
-
     if (checkName) {
       actions.resetForm();
       return window.alert(`${name} is already in contacts`);
     }
-    if (checkNumber) {
+    if (checkPhone) {
       actions.resetForm();
-      return window.alert(`${number} is already in contacts`);
+      return window.alert(`${phone} is already in contacts`);
     }
-
     dispatch(addContact(value));
     actions.resetForm();
   };
@@ -65,8 +63,8 @@ export const FormContacts = () => {
 
           <Label>
             <LabelText>Number</LabelText>
-            <Input type="tel" name="number" />
-            <FormError name="number" />
+            <Input type="tel" name="phone" />
+            <FormError name="phone" />
           </Label>
           <ButtonSubmit type="submit">Add contact</ButtonSubmit>
         </FormGroup>

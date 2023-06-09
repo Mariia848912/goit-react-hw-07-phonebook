@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Label, LabelText, Input } from './Filter.styled';
 import { setStatusFilter } from "../../redux/filterSlice";
-import { getFilter } from 'redux/selectors';
+import { selectFilter } from 'redux/selectors';
 
 export const Filter = () => {
   const dispatch = useDispatch();
-  const filter = useSelector(getFilter);
+  const filter = useSelector(selectFilter);
 
   const handleChange = e => {
     dispatch(setStatusFilter(e.currentTarget.value))
