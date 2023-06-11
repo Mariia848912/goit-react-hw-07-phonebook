@@ -10,6 +10,8 @@ import {
 import { FormError } from './FormError/FormError';
 import { getValidationSchema } from '../utils/getValitadionSchema';
 import { useAddContactMutation, useGetContactsQuery } from 'redux/api';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
 
 const initialValues = {
   name: '',
@@ -18,7 +20,7 @@ const initialValues = {
 
 export const FormContacts = () => {
   const { data: contacts } = useGetContactsQuery();
-  const [addContact] = useAddContactMutation();
+  const [addContact, {isError, isSuccess}] = useAddContactMutation();
 
   const handleSubmit = (value, actions) => {
     const name = value.name;
@@ -40,10 +42,14 @@ export const FormContacts = () => {
       actions.resetForm();
       return window.alert(`${phone} is already in contacts`);
     }
-  addContact(value);
-    actions.resetForm();
+    addContact(value);
+        actions.resetForm();
   };
-
+  useEffect(() => {
+        if (isSuccess) toast.success('The contact was added')
+        if(isError) toast.error('The contact was not added. Try later')
+  }, [isError, isSuccess])
+  
   return (
     <Formik
       initialValues={initialValues}
