@@ -9,9 +9,7 @@ import {
 } from './Form.styled';
 import { FormError } from './FormError/FormError';
 import { getValidationSchema } from '../utils/getValitadionSchema';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectVisibleContacts } from 'redux/selectors';
-import { addContact } from 'redux/operations';
+import { useAddContactMutation, useGetContactsQuery } from 'redux/api';
 
 const initialValues = {
   name: '',
@@ -19,8 +17,8 @@ const initialValues = {
 };
 
 export const FormContacts = () => {
-  const contacts = useSelector(selectVisibleContacts);
-  const dispatch = useDispatch();
+  const { data: contacts } = useGetContactsQuery();
+  const [addContact] = useAddContactMutation();
 
   const handleSubmit = (value, actions) => {
     const name = value.name;
@@ -42,7 +40,7 @@ export const FormContacts = () => {
       actions.resetForm();
       return window.alert(`${phone} is already in contacts`);
     }
-    dispatch(addContact(value));
+  addContact(value);
     actions.resetForm();
   };
 
